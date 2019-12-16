@@ -28,9 +28,15 @@ class User implements UserInterface
     private $roles = [];
 
     /**
+     * @var string The hashed password
+     * @ORM\Column(type="string")
+     */
+    private $password;
+
+    /**
      * @ORM\Column(type="string", length=255)
      */
-    private $FirstName;
+    private $firstname;
 
     public function getId(): ?int
     {
@@ -81,9 +87,16 @@ class User implements UserInterface
     /**
      * @see UserInterface
      */
-    public function getPassword()
+    public function getPassword(): string
     {
-        // not needed for apps that do not check user passwords
+        return (string) $this->password;
+    }
+
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
     }
 
     /**
@@ -91,7 +104,7 @@ class User implements UserInterface
      */
     public function getSalt()
     {
-        // not needed for apps that do not check user passwords
+        // not needed when using the "bcrypt" algorithm in security.yaml
     }
 
     /**
@@ -103,14 +116,14 @@ class User implements UserInterface
         // $this->plainPassword = null;
     }
 
-    public function getFirstName(): ?string
+    public function getFirstname(): ?string
     {
-        return $this->FirstName;
+        return $this->firstname;
     }
 
-    public function setFirstName(string $FirstName): self
+    public function setFirstname(string $firstname): self
     {
-        $this->FirstName = $FirstName;
+        $this->firstname = $firstname;
 
         return $this;
     }

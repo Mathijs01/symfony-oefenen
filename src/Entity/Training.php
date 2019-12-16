@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -19,7 +21,7 @@ class Training
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $name;
+    private $naam;
 
     /**
      * @ORM\Column(type="text")
@@ -32,23 +34,33 @@ class Training
     private $duration;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="decimal", precision=10, scale=2, nullable=true)
      */
     private $costs;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Lesson", mappedBy="training_id")
+     */
+    private $lessons;
+
+    public function __construct()
+    {
+        $this->lessons = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getNaam(): ?string
     {
-        return $this->name;
+        return $this->naam;
     }
 
-    public function setName(string $name): self
+    public function setNaam(string $naam): self
     {
-        $this->name = $name;
+        $this->naam = $naam;
 
         return $this;
     }
@@ -82,9 +94,40 @@ class Training
         return $this->costs;
     }
 
-    public function setCosts(string $costs): self
+    public function setCosts(?string $costs): self
     {
         $this->costs = $costs;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Lesson[]
+     */
+    public function getLessons(): Collection
+    {
+        return $this->lessons;
+    }
+
+    public function addLesson(Lesson $lesson): self
+    {
+        if (!$this->lessons->contains($lesson)) {
+            $this->lessons[] = $lesson;
+            $lesson->setTrainingId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLesson(Lesson $lesson): self
+    {
+        if ($this->lessons->contains($lesson)) {
+            $this->lessons->removeElement($lesson);
+            // set the owning side to null (unless already changed)
+            if ($lesson->getTrainingId() === $this) {
+                $lesson->setTrainingId(null);
+            }
+        }
 
         return $this;
     }

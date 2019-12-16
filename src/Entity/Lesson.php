@@ -2,7 +2,10 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use phpDocumentor\Reflection\Types\Integer;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\LessonRepository")
@@ -32,9 +35,29 @@ class Lesson
     private $location;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="integer", length=255)
      */
-    private $maxPersons;
+    private $max_persons;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="person", inversedBy="lessons")
+     */
+    private $instructor_id;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\training", inversedBy="lessons")
+     */
+    private $training_id;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Registration", mappedBy="lesson_id")
+     */
+    private $registrations;
+
+    public function __construct()
+    {
+        $this->registrations = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -77,14 +100,69 @@ class Lesson
         return $this;
     }
 
-    public function getMaxPersons(): ?string
+    public function getMaxPersons(): ?int
     {
-        return $this->maxPersons;
+        return $this->max_persons;
     }
 
-    public function setMaxPersons(string $maxPersons): self
+    public function setMaxPersons(Integer $max_persons): self
     {
-        $this->maxPersons = $maxPersons;
+        $this->max_persons = $max_persons;
+
+        return $this;
+    }
+
+    public function getInstructorId(): ?person
+    {
+        return $this->instructor_id;
+    }
+
+    public function setInstructorId(?person $instructor_id): self
+    {
+        $this->instructor_id = $instructor_id;
+
+        return $this;
+    }
+
+    public function getTrainingId(): ?training
+    {
+        return $this->training_id;
+    }
+
+    public function setTrainingId(?training $training_id): self
+    {
+        $this->training_id = $training_id;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Registration[]
+     */
+    public function getRegistrations(): Collection
+    {
+        return $this->registrations;
+    }
+
+    public function addRegistration(Registration $registration): self
+    {
+        if (!$this->registrations->contains($registration)) {
+            $this->registrations[] = $registration;
+            $registration->setLessonId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRegistration(Registration $registration): self
+    {
+        if ($this->registrations->contains($registration)) {
+            $this->registrations->removeElement($registration);
+            // set the owning side to null (unless already changed)
+            if ($registration->getLessonId() === $this) {
+                $registration->setLessonId(null);
+            }
+        }
 
         return $this;
     }

@@ -9,13 +9,13 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
-class home extends AbstractController
+class training extends AbstractController
 {
     /**
-     * @Route("/home", name="homepagina")
+     * @Route("/training", name="trainingpagina")
      */
-    public function homepage()
+    public function trainingpage()
     {
-        return $this->render("article/home.html.twig");
+        return $this->render("article/training.html.twig");
     }
 }
