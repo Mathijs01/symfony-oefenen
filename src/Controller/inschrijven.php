@@ -11,11 +11,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class inschrijven extends AbstractController
 {
-    /**
-     * @Route("/inschrijven", name="inschrijfpagina")
-     */
-    public function inschrijfpage()
-    {
-        return $this->render("article/inschrijven.html.twig");
-    }
+//    /**
+//     * @Route("/inschrijven", name="inschrijfpagina")
+//     */
+//    public function inschrijfpage()
+//    {
+//        return $this->render("article/inschrijven.html.twig");
+//    }
 }
