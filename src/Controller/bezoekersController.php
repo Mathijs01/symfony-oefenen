@@ -2,7 +2,10 @@
 
 namespace App\Controller;
 
+use App\Repository\GedragsregelsRepository;
+use App\Repository\TrainingRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class bezoekersController extends AbstractController
@@ -23,13 +26,13 @@ class bezoekersController extends AbstractController
         return $this->render("views/bezoeker/contact.html.twig");
     }
 
-    /**
-     * @Route("/training", name="trainingpagina")
-     */
-    public function trainingpage()
-    {
-        return $this->render("views/bezoeker/training.html.twig");
-    }
+//    /**
+//     * @Route("/training", name="trainingpagina")
+//     */
+//    public function trainingpage()
+//    {
+//        return $this->render("views/bezoeker/training.html.twig");
+//    }
 
     /**
      * @Route("/inschrijven", name="inschrijfpagina")
@@ -38,5 +41,22 @@ class bezoekersController extends AbstractController
     {
         return $this->render("views/bezoeker/inschrijven.html.twig");
     }
-
+    /**
+     * @Route ("/training", name="trainingpage")
+     */
+    public function trainingpage(TrainingRepository $trainingRepository):Response
+    {
+        return $this->render('views/bezoeker/training.html.twig', [
+            'trainings' => $trainingRepository->findAll(),
+        ]);
+    }
+    /**
+     * @Route("/regels", name="gedragregelspagina")
+     */
+    public function rulespage(GedragsregelsRepository $GedragsregelsRepository):Response
+    {
+        return $this->render('views/bezoeker/regels.html.twig', [
+            'regels' => $GedragsregelsRepository->findAll(),
+        ]);
+    }
 }
