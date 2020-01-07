@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Gegenereerd op: 06 jan 2020 om 11:22
+-- Gegenereerd op: 07 jan 2020 om 14:53
 -- Serverversie: 10.4.8-MariaDB
 -- PHP-versie: 7.3.11
 
@@ -147,8 +147,10 @@ INSERT INTO `training` (`id`, `naam`, `description`, `duration`, `costs`) VALUES
 CREATE TABLE `user` (
   `id` int(11) NOT NULL,
   `email` varchar(180) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `roles` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL
-) ;
+  `roles` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `firstname` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Gegevens worden geëxporteerd voor tabel `user`
@@ -206,6 +208,13 @@ ALTER TABLE `training`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexen voor tabel `user`
+--
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UNIQ_8D93D649E7927C74` (`email`);
+
+--
 -- AUTO_INCREMENT voor geëxporteerde tabellen
 --
 
@@ -243,7 +252,7 @@ ALTER TABLE `training`
 -- AUTO_INCREMENT voor een tabel `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Beperkingen voor geëxporteerde tabellen
